@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"dissent-api-service/cmd"
 	application "dissent-api-service/pkg/application/service"
 	"dissent-api-service/pkg/config"
@@ -10,9 +11,9 @@ import (
 )
 
 // Route declaration
-func getRoutes() *mux.Router {
+func getRoutes(conn *sql.DB, conf config.Config) *mux.Router {
 	r := mux.NewRouter()
-	application.NewUserInformation(r)
+	application.NewServiceRoutes(r, conn, conf)
 
 	return r
 }
@@ -41,7 +42,7 @@ func main() {
 	}
 	log.Println("DB migrations ran")
 
-	router := getRoutes()
+	router := getRoutes(serviceDB, *conf)
 	log.Println("API routes retrieved")
 
 	err = cmd.StartServer(&conf.Service, router)

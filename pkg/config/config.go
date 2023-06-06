@@ -13,8 +13,9 @@ const (
 )
 
 type Service struct {
-	Host string `yaml:"host"`
-	Port int    `yaml:"port"`
+	Host           string `yaml:"host"`
+	Port           int    `yaml:"port"`
+	HMACSigningKey string `yaml:"hmac-signing-key"`
 }
 
 type DB struct {
