@@ -16,4 +16,12 @@
 
 ## notes  
 
-- currently mono, probably should change eventually
+- currently mono, probably should change eventually  
+
+```bash
+docker system prune --all
+docker-compose build
+
+docker-compose up --force-recreate
+docker-compose down
+```
