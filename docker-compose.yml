@@ -9,10 +9,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - USER_DB_HOST=localhost
+      - USER_DB_HOST=postgres
       - USER_DB_PORT=5432
       - USER_DB_SERVICE_PASS=123PassID
       - HMAC_SIGNING_KEY=123PassID
+    networks:
+      - user-network
   postgres:
     image: postgres:14.5
     restart: always
@@ -24,9 +26,15 @@ services:
       options:
         max-size: 10m
         max-file: "3"
+    networks:
+      - user-network
     ports:
       - '5432:5432'
     volumes:
       - ./db-data/:/var/lib/postgresql/data/
       # copy the sql script to create tables
       - ./db/migrations/0_init.up.sql:/docker-entrypoint-initdb.d/0_init.up.sql
+
+networks:
+  user-network:
+    driver: bridge
