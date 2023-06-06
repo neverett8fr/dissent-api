@@ -3,4 +3,3 @@ CREATE TABLE IF NOT EXISTS users(
     username VARCHAR UNIQUE NOT NULL,
     password_hash VARCHAR NOT NULL
 );
-CREATE EXTENSION pgcrypto;
