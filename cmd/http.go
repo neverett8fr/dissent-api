@@ -1,10 +1,10 @@
 package cmd
 
 import (
+	"dissent-api-service/pkg/config"
 	"fmt"
 	"log"
 	"net/http"
-	"tempest-user-service/pkg/config"
 	"time"
 
 	"github.com/gorilla/mux"

@@ -1,4 +1,4 @@
-module tempest-user-service
+module dissent-api-service
 
 go 1.18
 

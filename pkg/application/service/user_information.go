@@ -1,9 +1,9 @@
 package service
 
 import (
+	application "dissent-api-service/pkg/application/entities"
 	"fmt"
 	"net/http"
-	application "tempest-user-service/pkg/application/entities"
 
 	"github.com/gorilla/mux"
 )

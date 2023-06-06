@@ -1,10 +1,10 @@
 package main
 
 import (
+	"dissent-api-service/cmd"
+	application "dissent-api-service/pkg/application/service"
+	"dissent-api-service/pkg/config"
 	"log"
-	"tempest-user-service/cmd"
-	application "tempest-user-service/pkg/application/service"
-	"tempest-user-service/pkg/config"
 
 	"github.com/gorilla/mux"
 )

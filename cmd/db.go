@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"database/sql"
+	"dissent-api-service/pkg/config"
 	"fmt"
-	"tempest-user-service/pkg/config"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
