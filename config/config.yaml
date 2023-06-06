@@ -5,6 +5,6 @@ dissent-db-config:
   driver: "postgres"
   host: ${USER_DB_HOST}
   port: ${USER_DB_PORT}
-  name: user_db
+  name: dissent_user_db
   username: service
   password: ${USER_DB_SERVICE_PASS}

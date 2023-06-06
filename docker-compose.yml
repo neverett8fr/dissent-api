@@ -4,24 +4,28 @@ version: '3.7'
 services:
   api:
     depends_on:
-    - postgres
+      - postgres
     build: .
     ports:
-    - "8080:8080"
+      - "8080:8080"
+    environment:
+      - USER_DB_HOST=localhost
+      - USER_DB_PORT=5432
+      - USER_DB_SERVICE_PASS=123PassID
   postgres:
     image: postgres:14.5
     restart: always
     environment:
-    - POSTGRES_DB=user_db
-    - POSTGRES_USER=service
-    - POSTGRES_PASSWORD=${USER_DB_SERVICE_PASS}
+      - POSTGRES_DB=dissent_user_db
+      - POSTGRES_USER=service
+      - POSTGRES_PASSWORD=123PassID
     logging:
       options:
         max-size: 10m
         max-file: "3"
     ports:
-    - '5432:5432'
-    volumes: 
-    - ./db-data/:/var/lib/postgresql/data/
-    # copy the sql script to create tables
-    - ./db/migrations/0_init.up.sql:/docker-entrypoint-initdb.d/0_init.up.sql
+      - '5432:5432'
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+      # copy the sql script to create tables
+      - ./db/migrations/0_init.up.sql:/docker-entrypoint-initdb.d/0_init.up.sql
