@@ -9,15 +9,15 @@ import (
 )
 
 func newUserInformation(r *mux.Router) {
-	r.HandleFunc("/test/{text}", testHandler).Methods("GET")
+	r.HandleFunc("/user/test-information/{text}", testUseInformationHandler).Methods(http.MethodGet)
 }
 
-func testHandler(w http.ResponseWriter, r *http.Request) {
+func testUseInformationHandler(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	text := params["text"]
 
-	body := application.NewResponse(fmt.Sprintf("test: %v", text))
+	body := application.NewResponse(fmt.Sprintf("UserInformationTest: %v", text))
 
-	writeReponse(w, r, body)
+	writeReponse(w, body)
 }

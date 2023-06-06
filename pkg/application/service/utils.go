@@ -22,9 +22,10 @@ func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf config.Config) {
 	TokenProvider = auth.InitialiseTokenProvider(conf.Service.HMACSigningKey, DBConn)
 
 	newUserInformation(r)
+	newUserOperation(r)
 }
 
-func writeReponse(w http.ResponseWriter, r *http.Request, body interface{}) {
+func writeReponse(w http.ResponseWriter, body interface{}) {
 
 	reponseBody, err := json.Marshal(body)
 	if err != nil {
