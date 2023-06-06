@@ -21,7 +21,6 @@ func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf config.Config) {
 	DBConn = db.NewDBConnFromExisting(conn)
 	TokenProvider = auth.InitialiseTokenProvider(conf.Service.HMACSigningKey, DBConn)
 
-	newUserInformation(r)
 	newUserOperation(r)
 }
 
