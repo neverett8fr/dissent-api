@@ -14,6 +14,7 @@ import (
 func newUserOperation(r *mux.Router) {
 
 	r.HandleFunc("/user/test/{text}", testUserOperationHandler).Methods(http.MethodGet)
+
 	r.HandleFunc("/user", createUserHandler).Methods(http.MethodPost)
 }
 

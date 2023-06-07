@@ -12,6 +12,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const (
+	headerAuth = "Authorization"
+)
+
 var (
 	DBConn        *db.DBConn
 	TokenProvider auth.TokenProvider
@@ -22,6 +26,7 @@ func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf config.Config) {
 	TokenProvider = auth.InitialiseTokenProvider(conf.Service.HMACSigningKey, DBConn)
 
 	newUserOperation(r)
+	newTokenOperation(r)
 }
 
 func writeReponse(w http.ResponseWriter, body interface{}) {
