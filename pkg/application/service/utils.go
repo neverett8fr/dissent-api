@@ -13,6 +13,8 @@ import (
 )
 
 const (
+	ctxEventBody = "ctxEventBody"
+
 	headerAuth = "Authorization"
 )
 

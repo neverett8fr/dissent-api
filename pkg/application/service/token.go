@@ -16,7 +16,7 @@ func newTokenOperation(r *mux.Router) {
 	r.HandleFunc("/token/test/{text}", testAuthHandler).Methods(http.MethodGet)
 
 	r.HandleFunc("/token", createToken).Methods(http.MethodPost)
-	r.HandleFunc("/token", checkToken).Methods(http.MethodGet)
+	// r.HandleFunc("/token", checkToken).Methods(http.MethodGet)
 }
 
 func testAuthHandler(w http.ResponseWriter, r *http.Request) {
@@ -69,19 +69,19 @@ func createToken(w http.ResponseWriter, r *http.Request) {
 	writeReponse(w, body)
 }
 
-func checkToken(w http.ResponseWriter, r *http.Request) {
-	// check headers or vars
-	reqToken := r.Header.Get(headerAuth)
+// func checkToken(w http.ResponseWriter, r *http.Request) {
+// 	// check headers or vars
+// 	reqToken := r.Header.Get(headerAuth)
 
-	err := TokenProvider.CheckToken(reqToken)
-	if err != nil {
-		log.Printf("error checking token, err %v", err)
-		body := application.NewResponse(nil, err)
-		w.WriteHeader(http.StatusUnauthorized)
-		writeReponse(w, body)
-		return
-	}
+// 	err := TokenProvider.CheckToken(reqToken, "username123")
+// 	if err != nil {
+// 		log.Printf("error checking token, err %v", err)
+// 		body := application.NewResponse(nil, err)
+// 		w.WriteHeader(http.StatusUnauthorized)
+// 		writeReponse(w, body)
+// 		return
+// 	}
 
-	body := application.NewResponse("token is valid", err)
-	writeReponse(w, body)
-}
+// 	body := application.NewResponse("token is valid", err)
+// 	writeReponse(w, body)
+// }

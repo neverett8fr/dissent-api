@@ -3,9 +3,7 @@ package service
 import (
 	application "dissent-api-service/pkg/application/entities"
 	"dissent-api-service/pkg/infra/entities"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -33,24 +31,9 @@ func testEventHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createEventHandler(w http.ResponseWriter, r *http.Request) {
-	// Read the request body
-	bodyIn, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		body := application.NewResponse(nil, err)
-		w.WriteHeader(http.StatusBadRequest)
-		writeReponse(w, body)
-		return
-	}
 
-	// Parse the request body into an event struct
-	eventInformation := newEventIn{}
-	err = json.Unmarshal(bodyIn, &eventInformation)
-	if err != nil {
-		body := application.NewResponse(nil, err)
-		w.WriteHeader(http.StatusBadRequest)
-		writeReponse(w, body)
-		return
-	}
+	// Retrieve the event information from the request context
+	eventInformation := r.Context().Value(ctxEventBody).(newEventIn)
 
 	// Get id from username
 	usr, err := DBConn.ReadUserID(eventInformation.Organiser)

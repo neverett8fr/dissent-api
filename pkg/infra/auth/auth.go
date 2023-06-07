@@ -46,7 +46,18 @@ func (t *TokenProvider) NewToken(username string, password string) (string, erro
 
 }
 
-func (t *TokenProvider) CheckToken(tok string) error {
+func (t *TokenProvider) getJWTTokenWithClaims(tok string) (*jwt.Token, error) {
+
+	// https://github.com/MicahParks/keyfunc
+	var keyFunc jwt.Keyfunc = func(token *jwt.Token) (interface{}, error) {
+		return t.HMACSigningKey, nil
+	}
+
+	claims := &entities.Claims{}
+	return jwt.ParseWithClaims(tok, claims, keyFunc)
+}
+
+func (t *TokenProvider) CheckToken(tok string, username string) error {
 
 	tokenSplit := strings.Split(tok, "Bearer ")
 	if len(tokenSplit) != 2 {
@@ -59,17 +70,19 @@ func (t *TokenProvider) CheckToken(tok string) error {
 		return err
 	}
 
-	// https://github.com/MicahParks/keyfunc
-	var keyFunc jwt.Keyfunc = func(token *jwt.Token) (interface{}, error) {
-		return t.HMACSigningKey, nil
-	}
-	parsed, err := jwt.Parse(tok, keyFunc)
+	parsed, err := t.getJWTTokenWithClaims(tok)
 	if err != nil {
 		return fmt.Errorf("error parsing jwt token, err %v", err)
 	}
 
-	if !parsed.Valid {
+	claims, ok := parsed.Claims.(*entities.Claims)
+	if !ok || !parsed.Valid {
 		return fmt.Errorf("error, token is not valid")
+	}
+
+	// Check if the token subject (sub) matches the provided username
+	if claims.Username != username {
+		return fmt.Errorf("error, token subject does not match the provided username")
 	}
 
 	return nil
