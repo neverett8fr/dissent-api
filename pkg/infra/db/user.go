@@ -22,7 +22,7 @@ func (conn *DBConn) CreateUser(user entities.User) error {
 		log.Println(err)
 		return err
 	}
-	if id != "" {
+	if id != 0 {
 		err := fmt.Errorf("error username exists")
 		log.Println(err)
 		return err
@@ -38,14 +38,14 @@ func (conn *DBConn) CreateUser(user entities.User) error {
 	return nil
 }
 
-func (conn *DBConn) ReadUserID(username string) (string, error) {
+func (conn *DBConn) ReadUserID(username string) (int, error) {
 
 	row := conn.Conn.QueryRow(fmt.Sprintf("SELECT %s FROM %s WHERE %s = $1", userColumnID, userTableUsers, userColumnUsername), username)
 
-	var id string
+	var id int
 	err := row.Scan(&id)
 	if err != nil {
-		return "", fmt.Errorf("error scanning id, err %v", err)
+		return 0, fmt.Errorf("error scanning id, err %v", err)
 	}
 
 	return id, nil

@@ -18,6 +18,33 @@ type User struct {
 	PasswordHashed string `json:"password_hashed"`
 }
 
+type Event struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Location    string `json:"location"`
+	Date        string `json:"date"`
+	CreatedAt   string `json:"created_at"`
+	Organiser   int    `json:"organiser_id"`
+}
+
+func (e *Event) CheckValid() bool {
+
+	return true
+}
+
+func NewEvent(organiser int, title string, desc string, loc string, date string) (Event, error) {
+	event := Event{
+		Title:       title,
+		Description: desc,
+		Location:    loc,
+		Date:        date,
+		Organiser:   organiser,
+	}
+
+	return event, nil
+}
+
 func (u *User) CheckValid() bool {
 
 	if len(u.Username) < 5 || u.PasswordHashed == "" {

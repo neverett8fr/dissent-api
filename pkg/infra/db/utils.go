@@ -18,8 +18,14 @@ const (
 	userColumnID           = "id"
 	userColumnUsername     = "username"
 	userColumnPasswordHash = "password_hash"
+	userTableUsers         = "users"
 
-	userTableUsers = "users"
+	eventColumnTitle     = "title"
+	eventColumnDesc      = "description"
+	eventColumnLocation  = "location"
+	eventColumnDate      = "date"
+	eventColumnOrganiser = "organiser_id"
+	eventsTable          = "events"
 )
 
 type DBConn struct {
