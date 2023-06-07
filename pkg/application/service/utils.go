@@ -27,6 +27,7 @@ func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf config.Config) {
 
 	newUserOperation(r)
 	newTokenOperation(r)
+	newEventOperation(r)
 }
 
 func writeReponse(w http.ResponseWriter, body interface{}) {
