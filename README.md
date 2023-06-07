@@ -14,6 +14,16 @@
 - [ ] notifications / updates  
 - [ ] search / discovery  
 
+## API endpoints  
+
+- [ ] events
+  - [ ] create event
+- [ ] tokens
+  - [ ] create
+  - [ ] check
+- [ ] user
+  - [ ] create
+
 ## notes  
 
 - currently mono, probably should change eventually  
