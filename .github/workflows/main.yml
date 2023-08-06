@@ -1,6 +1,9 @@
 name: Push to Space
 on: push
 
+env:
+  HMAC_SIGNING_KEY: ${{ secrets.HMAC_SIGNING_KEY }}
+
 jobs:
   push-to-space:
     runs-on: ubuntu-latest
