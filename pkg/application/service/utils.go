@@ -1,7 +1,6 @@
 package service
 
 import (
-	"database/sql"
 	"dissent-api-service/pkg/config"
 	"dissent-api-service/pkg/infra/auth"
 	"dissent-api-service/pkg/infra/db"
@@ -9,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/deta/deta-go/service/base"
 	"github.com/gorilla/mux"
 )
 
@@ -23,8 +23,8 @@ var (
 	TokenProvider auth.TokenProvider
 )
 
-func NewServiceRoutes(r *mux.Router, conn *sql.DB, conf config.Config) {
-	DBConn = db.NewDBConnFromExisting(conn)
+func NewServiceRoutes(r *mux.Router, conf config.Config, baseArr map[string]*base.Base) {
+	DBConn = db.NewDBConnFromExisting(baseArr)
 	TokenProvider = auth.InitialiseTokenProvider(conf.Service.HMACSigningKey, DBConn)
 
 	newUserOperation(r)

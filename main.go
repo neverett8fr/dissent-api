@@ -1,19 +1,20 @@
 package main
 
 import (
-	"database/sql"
 	"dissent-api-service/cmd"
 	application "dissent-api-service/pkg/application/service"
 	"dissent-api-service/pkg/config"
 	"log"
+	"reflect"
 
+	"github.com/deta/deta-go/service/base"
 	"github.com/gorilla/mux"
 )
 
 // Route declaration
-func getRoutes(conn *sql.DB, conf config.Config) *mux.Router {
+func getRoutes(conf config.Config, baseArr map[string]*base.Base) *mux.Router {
 	r := mux.NewRouter()
-	application.NewServiceRoutes(r, conn, conf)
+	application.NewServiceRoutes(r, conf, baseArr)
 
 	return r
 }
@@ -27,22 +28,21 @@ func main() {
 	}
 	log.Println("config initialised")
 
-	serviceDB, err := cmd.OpenDB(&conf.DB)
+	serviceDB, err := cmd.OpenDB()
 	if err != nil {
 		log.Fatalf("error starting db, err %v", err)
 		return
 	}
-	defer serviceDB.Close()
-	log.Println("connection to DB setup")
+	log.Printf("configuration of DB setup with key %v", serviceDB.ProjectKey)
 
-	err = cmd.MigrateDB(serviceDB, conf.DB.Driver)
+	dbArr, err := cmd.GetBaseArr(serviceDB)
 	if err != nil {
-		log.Fatalf("error running DB migrations, %v", err)
+		log.Fatalf("error getting DB arr, %v", err)
 		return
 	}
-	log.Println("DB migrations ran")
+	log.Printf("DB array returned with names %v", reflect.ValueOf(dbArr).MapKeys())
 
-	router := getRoutes(serviceDB, *conf)
+	router := getRoutes(*conf, dbArr)
 	log.Println("API routes retrieved")
 
 	err = cmd.StartServer(&conf.Service, router)

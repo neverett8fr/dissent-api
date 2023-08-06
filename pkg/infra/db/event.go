@@ -6,32 +6,26 @@ import (
 	"log"
 )
 
-func (conn *DBConn) CreateEvent(event entities.Event) error {
+func (conn *DBConn) CreateEvent(event entities.Event) (string, error) {
 
 	if !event.CheckValid() {
 		err := fmt.Errorf("error creating user, entity not valid")
 		log.Println(err)
-		return err
+		return "", err
 	}
 
-	if event.ID != 0 {
+	if event.ID != "" {
 		err := fmt.Errorf("error username exists")
 		log.Println(err)
-		return err
+		return "", err
 	}
 
-	_, err := conn.Conn.Exec(
-		fmt.Sprintf(
-			"INSERT INTO %s(%s, %s, %s, %s, %s) VALUES($1, $2, $3, $4, $5)",
-			eventsTable, eventColumnTitle, eventColumnDesc, eventColumnDate, eventColumnLocation, eventColumnOrganiser,
-		),
-		event.Title, event.Description, event.Date, event.Location, event.Organiser,
-	)
+	key, err := conn.Conn[eventsTable].Put(event)
 	if err != nil {
 		err := fmt.Errorf("error inserting new event, err %v", err)
 		log.Println(err)
-		return err
+		return "", err
 	}
 
-	return nil
+	return key, nil
 }

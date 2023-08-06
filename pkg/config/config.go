@@ -18,18 +18,8 @@ type Service struct {
 	HMACSigningKey string `yaml:"hmac-signing-key"`
 }
 
-type DB struct {
-	Driver   string `yaml:"driver"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Name     string `yaml:"name"`
-}
-
 type Config struct {
 	Service Service `yaml:"dissent-api-config"`
-	DB      DB      `yaml:"dissent-db-config"`
 }
 
 func Initialise() (*Config, error) {

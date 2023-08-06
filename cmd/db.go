@@ -1,66 +1,43 @@
 package cmd
 
 import (
-	"database/sql"
-	"dissent-api-service/pkg/config"
 	"fmt"
 
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-
+	"github.com/deta/deta-go/deta"
+	"github.com/deta/deta-go/service/base"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
 const (
-	// https://github.com/golang-migrate
-	// file:///absolute/path
-	// file://relative/path
-	pathToMigration = "file://db/migrations"
+	eventsTable = "events"
+	userTable   = "users"
 )
 
-func OpenDB(conf *config.DB) (*sql.DB, error) {
-	connString := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		conf.Host,
-		conf.Port,
-		conf.Username,
-		conf.Password,
-		conf.Name,
-	)
+func OpenDB() (*deta.Deta, error) {
 
-	conn, err := sql.Open(conf.Driver, connString)
+	d, err := deta.New()
 	if err != nil {
-		return nil, fmt.Errorf("error connecting to db, err %v", err)
+		return nil, fmt.Errorf("error initialising Deta instance, err %v", err)
 	}
 
-	err = conn.Ping()
-	if err != nil {
-		return nil, fmt.Errorf("error sending ping to db, err %v", err)
-	}
-
-	return conn, nil
+	return d, nil
 }
 
-func MigrateDB(db *sql.DB, driverType string) error {
+func GetBaseArr(d *deta.Deta) (map[string]*base.Base, error) {
 
-	driverInstance, err := postgres.WithInstance(db, &postgres.Config{})
+	dbUsers, err := base.New(d, userTable)
 	if err != nil {
-		return fmt.Errorf("error getting driver instance, err %v", err)
+		return nil, fmt.Errorf("error getting db, err %v", err)
 	}
-	m, err := migrate.NewWithDatabaseInstance(
-		pathToMigration,
-		driverType,
-		driverInstance,
-	)
+
+	dbEvents, err := base.New(d, eventsTable)
 	if err != nil {
-		return fmt.Errorf("error getting migrations, err %v", err)
+		return nil, fmt.Errorf("error getting db, err %v", err)
 	}
 
-	err = m.Up()
-	if err != nil && err != migrate.ErrNoChange {
-		return fmt.Errorf("error running migrate up, err %v", err)
-	}
-
-	return nil
+	return map[string]*base.Base{
+		eventsTable: dbEvents,
+		userTable:   dbUsers,
+	}, nil
 }

@@ -2,6 +2,12 @@
 v: 0
 micros:
   - name: dissent-api
+    public_routes:
+      - "/user"
+      - "/user/*"
+      - "/token"
+      - "/event"
+      - "/event/*"
     src: .
     engine: custom
     primary: true

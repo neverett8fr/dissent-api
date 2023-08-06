@@ -46,7 +46,7 @@ func createEventHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Create a new event object
 	event, err := entities.NewEvent(
-		usr,
+		usr.Username,
 		eventInformation.Title,
 		eventInformation.Description,
 		eventInformation.Location,
@@ -59,7 +59,7 @@ func createEventHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = DBConn.CreateEvent(event)
+	_, err = DBConn.CreateEvent(event)
 	if err != nil {
 		body := application.NewResponse(nil, err)
 		w.WriteHeader(http.StatusBadRequest)

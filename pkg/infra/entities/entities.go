@@ -13,19 +13,18 @@ type Claims struct {
 }
 
 type User struct {
-	ID             int    `json:"id"`
-	Username       string `json:"username"`
+	Username       string `json:"key"`
 	PasswordHashed string `json:"password_hashed"`
 }
 
 type Event struct {
-	ID          int    `json:"id"`
+	ID          string `json:"key"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Location    string `json:"location"`
 	Date        string `json:"date"`
 	CreatedAt   string `json:"created_at"`
-	Organiser   int    `json:"organiser_id"`
+	Organiser   string `json:"organiser_id"`
 }
 
 func (e *Event) CheckValid() bool {
@@ -33,7 +32,7 @@ func (e *Event) CheckValid() bool {
 	return true
 }
 
-func NewEvent(organiser int, title string, desc string, loc string, date string) (Event, error) {
+func NewEvent(organiser string, title string, desc string, loc string, date string) (Event, error) {
 	event := Event{
 		Title:       title,
 		Description: desc,
