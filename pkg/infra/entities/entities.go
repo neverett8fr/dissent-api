@@ -2,6 +2,7 @@ package entities
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -38,6 +39,7 @@ func NewEvent(organiser string, title string, desc string, loc string, date stri
 		Description: desc,
 		Location:    loc,
 		Date:        date,
+		CreatedAt:   time.Now().String(),
 		Organiser:   organiser,
 	}
 
