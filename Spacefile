@@ -8,6 +8,7 @@ micros:
       - "/token"
       - "/event"
       - "/event/*"
+      - "/legal/*"
     src: .
     engine: custom
     primary: true

@@ -30,6 +30,7 @@ func NewServiceRoutes(r *mux.Router, conf config.Config, baseArr map[string]*bas
 	newUserOperation(r)
 	newTokenOperation(r)
 	newEventOperation(r)
+	newLegal(r)
 }
 
 func writeReponse(w http.ResponseWriter, body interface{}) {
