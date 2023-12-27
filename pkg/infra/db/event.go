@@ -4,6 +4,8 @@ import (
 	"dissent-api-service/pkg/infra/entities"
 	"fmt"
 	"log"
+
+	"github.com/deta/deta-go/service/base"
 )
 
 func (conn *DBConn) CreateEvent(event entities.Event) (string, error) {
@@ -28,4 +30,27 @@ func (conn *DBConn) CreateEvent(event entities.Event) (string, error) {
 	}
 
 	return key, nil
+}
+
+func (conn *DBConn) GetEvents(query string) ([]map[string]interface{}, error) {
+
+	var events []map[string]interface{}
+
+	q := base.Query{
+		{"value?contains": query},
+	}
+
+	_, err := conn.Conn[eventsTable].Fetch(&base.FetchInput{
+		Q:    q,
+		Dest: &events,
+	})
+
+	if err != nil {
+		err := fmt.Errorf("error getting events, err %v", err)
+		log.Println(err)
+		return nil, err
+	}
+	log.Println(events)
+
+	return events, nil
 }

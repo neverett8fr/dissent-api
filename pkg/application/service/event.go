@@ -18,6 +18,7 @@ func newEventOperation(r *mux.Router) {
 
 	eventRouter.HandleFunc("/test/{text}", testEventHandler).Methods(http.MethodGet)
 	eventRouterWithAuth.HandleFunc("", createEventHandler).Methods(http.MethodPost)
+	eventRouterWithAuth.HandleFunc("/{query}", getEventsHandler).Methods(http.MethodGet)
 }
 
 func testEventHandler(w http.ResponseWriter, r *http.Request) {
@@ -68,6 +69,18 @@ func createEventHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body := application.NewResponse(fmt.Sprintf("event created with title %v", eventInformation.Title), err)
+
+	writeReponse(w, body)
+}
+
+func getEventsHandler(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+	query := params["query"]
+
+	events, err := DBConn.GetEvents(query)
+
+	body := application.NewResponse(fmt.Sprintf("events %v", events), err)
 
 	writeReponse(w, body)
 }
